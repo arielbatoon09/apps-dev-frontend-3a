@@ -1,10 +1,11 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, ArrowUpDown } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
 
 export type Product = {
   id: string;
@@ -17,24 +18,81 @@ export type Product = {
 
 export const columns: ColumnDef<Product>[] = [
   {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
     accessorKey: "id",
-    header: "Product ID",
+    header: ({ column }) => {
+      return (
+        <span className="flex items-center cursor-pointer" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          Product ID
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </span>
+      )
+    },
   },
   {
     accessorKey: "name",
-    header: "Product Name",
+    header: ({ column }) => {
+      return (
+        <span className="flex items-center cursor-pointer" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          Product Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </span>
+      )
+    },
   },
   {
     accessorKey: "description",
-    header: "Product Description",
+    header: ({ column }) => {
+      return (
+        <span className="flex items-center cursor-pointer" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          Description
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </span>
+      )
+    },
   },
   {
     accessorKey: "stock",
-    header: "Stocks",
+    header: ({ column }) => {
+      return (
+        <span className="flex items-center cursor-pointer" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          Stocks
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </span>
+      )
+    },
   },
   {
     accessorKey: "price",
-    header: "Price",
+    header: ({ column }) => {
+      return (
+        <span className="flex items-center cursor-pointer" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          Price
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </span>
+      )
+    },
     cell: ({ row }) => {
       const price = parseFloat(row.getValue("price"));
       const formatted = new Intl.NumberFormat("en-US", {

@@ -1,21 +1,20 @@
+"use client"
+
+import useSWR from "swr";
+import { fetcher } from "@/lib/fetcher";
+
 import { columns, Product } from "./columns";
 import { DataTable } from "./data-table";
 
-export default function ProductAdminPage() {
-  const data = [
-    {
-      id: "576f4e5a-4ca8-4a5e-b3c5-68dc0eb93d79",
-      name: "Product 2",
-      description: "Sample Product 2",
-      price: 100,
-      stock: 100,
-      isActive: true,
-    }
-  ]
+import { CreateProductModal } from "@/components/widget/create-product-modal";
 
+export default function ProductAdminPage() {
+  const { data: response, mutate } = useSWR("/api/v1/product-list", fetcher);
+  const data: Product[] = response?.data || [];
   return (
     <section>
       <div className="container mx-auto py-10">
+        <CreateProductModal onSuccess={mutate} />
         <DataTable columns={columns} data={data} />
       </div>
     </section>
